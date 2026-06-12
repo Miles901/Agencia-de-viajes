@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Plane, Mail, Phone, MapPin, Instagram, Facebook, Twitter, Youtube } from "lucide-react";
+import { Mail, Phone, MapPin, Instagram, Facebook, Twitter, Youtube } from "lucide-react";
+import { AirvonLogo } from "@/components/airvon-logo";
 
 const socialLinks = [
   { icon: Instagram, href: "https://instagram.com/airvon", label: "Instagram" },
@@ -14,11 +15,8 @@ export function Footer() {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="bg-primary p-2 rounded-lg">
-                <Plane className="h-5 w-5 text-primary-foreground" />
-              </div>
-              <span className="text-xl font-bold">Airvon</span>
+            <div className="mb-4">
+              <AirvonLogo size={36} showText inverted />
             </div>
             <p className="text-background/70 text-sm leading-relaxed mb-5">
               Tu plataforma de confianza para reservar vuelos y tours en Colombia y Peru. Viaja con seguridad y los mejores precios.

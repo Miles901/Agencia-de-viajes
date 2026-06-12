@@ -37,7 +37,7 @@ const offers = [
     discount: 24,
     destination: "Medellin, Colombia",
     validUntil: "20 Jun 2026",
-    image: "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=400&h=300&fit=crop",
+    image: "https://images.unsplash.com/photo-1619546813926-a78fa6372cd2?w=400&h=300&fit=crop",
   },
 ];
 

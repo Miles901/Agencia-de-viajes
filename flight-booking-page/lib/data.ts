@@ -72,7 +72,7 @@ export const destinations: Destination[] = [
     id: 3,
     name: "Medellin",
     country: "Colombia",
-    image: "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1619546813926-a78fa6372cd2?w=800&q=80",
     price: 279,
     rating: 4.7,
     description: "La ciudad de la eterna primavera",

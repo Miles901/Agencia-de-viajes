@@ -1,12 +1,13 @@
 "use client";
 
-import { Plane, Menu, X, LogOut, MapPin, Sun, Moon } from "lucide-react";
+import { Menu, X, LogOut, MapPin, Sun, Moon } from "lucide-react";
 import { useState } from "react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AuthModal } from "@/components/auth-modal";
 import { TourRequestModal } from "@/components/tour-request-modal";
+import { AirvonLogo } from "@/components/airvon-logo";
 
 interface UserData {
   name: string;
@@ -45,10 +46,7 @@ export function Header() {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-2">
               <Link href="/" className="flex items-center gap-2">
-                <div className="bg-primary p-2 rounded-lg">
-                  <Plane className="h-5 w-5 text-primary-foreground" />
-                </div>
-                <span className="text-xl font-bold text-foreground">Airvon</span>
+                <AirvonLogo size={36} showText />
               </Link>
             </div>
 
