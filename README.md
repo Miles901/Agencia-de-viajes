@@ -72,6 +72,14 @@ cd backend/GastosPersonales.Api
 dotnet run
 ```
 
+Si `dotnet` no se reconoce, usa el script incluido o recarga la terminal:
+
+```bash
+source ~/.bashrc
+# o
+./run.sh
+```
+
 La API aplica migraciones automáticamente al iniciar.
 
 ### 3. Web (React)
