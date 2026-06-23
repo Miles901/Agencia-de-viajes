@@ -25,18 +25,13 @@ Aplicación completa para registrar gastos personales en **pesos dominicanos (DO
         └────────────────┘
 ```
 
-## ⚠️ SQL Server en Windows
+## ⚠️ ¿Creaste el proyecto solo en Cursor?
 
-Si tu SQL Server está en tu PC (ej. `ISAC\EXPRESS`), **debes correr la API en ese mismo PC**, no en el entorno Linux de Cursor.
+Si usas **Cursor en la nube**, la API **no puede** conectar a SQL Server en tu PC.
 
-```powershell
-cd backend\GastosPersonales.Api
-copy appsettings.Development.json.example appsettings.Development.json
-# Edita la contraseña y el nombre de instancia
-.\run.ps1
-```
+**Solución:** clona este repo en tu **Windows**, ábrelo con Cursor ahí y corre la API localmente.
 
-Guía detallada: **[docs/CONEXION-SQL.md](docs/CONEXION-SQL.md)**
+👉 Guía paso a paso: **[docs/SETUP-CURSOR.md](docs/SETUP-CURSOR.md)**
 
 ---
 
