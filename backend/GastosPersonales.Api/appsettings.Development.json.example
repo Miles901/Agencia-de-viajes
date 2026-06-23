@@ -1,5 +1,10 @@
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost,1433;Database=GastosPersonales;User Id=sa;Password=TU_PASSWORD_AQUI;TrustServerCertificate=True;Encrypt=False;"
+    "DefaultConnection": "Server=localhost\\SQLEXPRESS;Database=GastosPersonales;User Id=TU_USUARIO;Password=TU_PASSWORD;TrustServerCertificate=True;Encrypt=False;"
+  },
+  "_ejemplos": {
+    "instancia_en_mismo_pc": "Server=localhost\\EXPRESS;Database=GastosPersonales;User Id=sa;Password=TU_PASSWORD;TrustServerCertificate=True;Encrypt=False;",
+    "con_puerto_fijo": "Server=localhost,1433;Database=GastosPersonales;User Id=sa;Password=TU_PASSWORD;TrustServerCertificate=True;Encrypt=False;",
+    "windows_auth": "Server=localhost\\SQLEXPRESS;Database=GastosPersonales;Trusted_Connection=True;TrustServerCertificate=True;Encrypt=False;"
   }
 }

@@ -25,7 +25,20 @@ Aplicación completa para registrar gastos personales en **pesos dominicanos (DO
         └────────────────┘
 ```
 
-## Requisitos
+## ⚠️ SQL Server en Windows
+
+Si tu SQL Server está en tu PC (ej. `ISAC\EXPRESS`), **debes correr la API en ese mismo PC**, no en el entorno Linux de Cursor.
+
+```powershell
+cd backend\GastosPersonales.Api
+copy appsettings.Development.json.example appsettings.Development.json
+# Edita la contraseña y el nombre de instancia
+.\run.ps1
+```
+
+Guía detallada: **[docs/CONEXION-SQL.md](docs/CONEXION-SQL.md)**
+
+---
 
 - [.NET 8 SDK](https://dotnet.microsoft.com/download)
 - [Node.js 20+](https://nodejs.org/)

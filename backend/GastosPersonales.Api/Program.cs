@@ -3,6 +3,7 @@ using System.Text;
 using GastosPersonales.Api.Data;
 using GastosPersonales.Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -12,8 +13,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Falta ConnectionStrings:DefaultConnection en appsettings.");
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(connectionString));
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -59,16 +63,46 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("Database");
+    var csb = new SqlConnectionStringBuilder(connectionString);
 
     try
     {
-        logger.LogInformation("Aplicando migraciones en SQL Server...");
+        logger.LogInformation(
+            "Conectando a SQL Server → Servidor: {Server}, Base: {Database}, Usuario: {User}",
+            csb.DataSource,
+            csb.InitialCatalog,
+            csb.UserID);
+
+        logger.LogInformation("Aplicando migraciones...");
         db.Database.Migrate();
-        logger.LogInformation("Base de datos lista.");
+        logger.LogInformation("Base de datos '{Database}' lista.", csb.InitialCatalog);
+    }
+    catch (SqlException ex) when (ex.Number is 26 or -1 or 53)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine();
+        Console.WriteLine("╔══════════════════════════════════════════════════════════════╗");
+        Console.WriteLine("║  ERROR: No se pudo conectar a SQL Server                     ║");
+        Console.WriteLine("╚══════════════════════════════════════════════════════════════╝");
+        Console.ResetColor();
+        Console.WriteLine();
+        Console.WriteLine($"  Servidor configurado : {csb.DataSource}");
+        Console.WriteLine($"  Base de datos        : {csb.InitialCatalog}");
+        Console.WriteLine($"  Error                : {ex.Message}");
+        Console.WriteLine();
+        Console.WriteLine("  Posibles causas:");
+        Console.WriteLine("  • La API corre en Linux/nube y SQL Server está en tu PC Windows.");
+        Console.WriteLine("    → Ejecuta 'dotnet run' en tu PC donde está SQL Server.");
+        Console.WriteLine("  • Nombre de instancia incorrecto (EXPRESS vs SQLEXPRESS).");
+        Console.WriteLine("  • SQL Server Browser o TCP/IP deshabilitados.");
+        Console.WriteLine();
+        Console.WriteLine("  Guía completa: docs/CONEXION-SQL.md");
+        Console.WriteLine();
+        throw;
     }
     catch (Exception ex)
     {
-        logger.LogError(ex, "No se pudo conectar o migrar la base de datos. Revisa ConnectionStrings en appsettings.Development.json");
+        logger.LogError(ex, "No se pudo conectar o migrar la base de datos.");
         throw;
     }
 }
