@@ -58,7 +58,19 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    db.Database.Migrate();
+    var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("Database");
+
+    try
+    {
+        logger.LogInformation("Aplicando migraciones en SQL Server...");
+        db.Database.Migrate();
+        logger.LogInformation("Base de datos lista.");
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "No se pudo conectar o migrar la base de datos. Revisa ConnectionStrings en appsettings.Development.json");
+        throw;
+    }
 }
 
 if (app.Environment.IsDevelopment())

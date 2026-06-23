@@ -62,8 +62,32 @@ npx expo start
 
 ### 1. SQL Server
 
-Asegúrate de tener SQL Server corriendo y actualiza la cadena de conexión en  
-`backend/GastosPersonales.Api/appsettings.json`.
+**No necesitas crear la base manualmente.** La API la crea sola al iniciar.
+
+Solo configura tu contraseña de SQL Server:
+
+```bash
+cd backend/GastosPersonales.Api
+cp appsettings.Development.json.example appsettings.Development.json
+```
+
+Edita `appsettings.Development.json` y cambia `TU_PASSWORD_AQUI` por tu contraseña de `sa` (o tu usuario SQL).
+
+Luego crea la base y tablas con:
+
+```bash
+# Opción A — script automático (recomendado)
+../../scripts/setup-database.sh
+
+# Opción B — al iniciar la API
+./run.sh
+```
+
+**Opción C — SQL manual** (si prefieres SSMS o Azure Data Studio):
+
+Ejecuta el archivo `scripts/init-database.sql` en tu instancia de SQL Server.
+
+La base se llama **`GastosPersonales`** y crea las tablas `Users` y `Expenses`.
 
 ### 2. Backend (C#)
 

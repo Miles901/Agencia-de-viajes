@@ -9,6 +9,7 @@ dist/
 # Environment
 .env
 .env.local
+backend/**/appsettings.Development.json
 
 # IDE
 .vs/
