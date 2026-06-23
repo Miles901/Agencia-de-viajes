@@ -6,6 +6,21 @@
 
 .app-header {
   margin-bottom: 2rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.logout-btn {
+  flex-shrink: 0;
+  margin-top: 0.5rem;
+}
+
+.loading-msg {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 2rem;
 }
 
 .eyebrow {

@@ -1,33 +1,25 @@
-# Mis Gastos — Registro de gastos personales
+# Mis Gastos — Web
 
-Aplicación web en React para registrar y visualizar gastos personales.
+App web en React conectada al backend C# y SQL Server.
 
-## Características
-
-- Registrar gastos con descripción, importe, categoría y fecha
-- Resumen con total general, gasto del mes y desglose por categoría
-- Historial con búsqueda y filtros por categoría
-- Persistencia automática en `localStorage` del navegador
-
-## Inicio rápido
+## Configuración
 
 ```bash
-cd gastos-personales
+cp .env.example .env
+```
+
+## Ejecutar
+
+```bash
 npm install
 npm run dev
 ```
 
-Abre [http://localhost:5173](http://localhost:5173) en tu navegador.
+Abre http://localhost:5173
 
-## Scripts
+## Funciones
 
-| Comando        | Descripción              |
-|----------------|--------------------------|
-| `npm run dev`  | Servidor de desarrollo   |
-| `npm run build`| Build de producción      |
-| `npm run preview` | Vista previa del build |
-
-## Tecnologías
-
-- React 19
-- Vite 8
+- Registro e inicio de sesión
+- Gastos en pesos dominicanos (RD$)
+- Resumen por categoría
+- Sincronización con la misma cuenta en la app móvil

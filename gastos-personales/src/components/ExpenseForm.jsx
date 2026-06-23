@@ -65,7 +65,7 @@ export default function ExpenseForm({ onAdd }) {
 
         <div className="form-grid">
           <div className="form-row">
-            <label htmlFor="amount">Importe (€)</label>
+            <label htmlFor="amount">Importe (RD$)</label>
             <input
               id="amount"
               name="amount"

@@ -1,41 +1,70 @@
-import { useEffect, useState } from 'react'
-
-const STORAGE_KEY = 'gastos-personales'
-
-function loadExpenses() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return []
-    const parsed = JSON.parse(raw)
-    return Array.isArray(parsed) ? parsed : []
-  } catch {
-    return []
-  }
-}
+import { useCallback, useEffect, useState } from 'react'
+import { api } from '../services/api'
 
 export function useExpenses() {
-  const [expenses, setExpenses] = useState(loadExpenses)
+  const [expenses, setExpenses] = useState([])
+  const [summary, setSummary] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  const refresh = useCallback(async () => {
+    setLoading(true)
+    setError('')
+    try {
+      const [list, stats] = await Promise.all([
+        api.getExpenses(),
+        api.getSummary(),
+      ])
+      setExpenses(list)
+      setSummary(stats)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(expenses))
-  }, [expenses])
+    let active = true
 
-  const addExpense = (expense) => {
-    const newExpense = {
-      id: crypto.randomUUID(),
-      createdAt: new Date().toISOString(),
-      ...expense,
+    ;(async () => {
+      setLoading(true)
+      setError('')
+      try {
+        const [list, stats] = await Promise.all([
+          api.getExpenses(),
+          api.getSummary(),
+        ])
+        if (!active) return
+        setExpenses(list)
+        setSummary(stats)
+      } catch (err) {
+        if (!active) return
+        setError(err.message)
+      } finally {
+        if (active) setLoading(false)
+      }
+    })()
+
+    return () => {
+      active = false
     }
-    setExpenses((prev) => [newExpense, ...prev])
+  }, [])
+
+  const addExpense = async (expense) => {
+    await api.createExpense(expense)
+    await refresh()
   }
 
-  const deleteExpense = (id) => {
-    setExpenses((prev) => prev.filter((e) => e.id !== id))
+  const deleteExpense = async (id) => {
+    await api.deleteExpense(id)
+    await refresh()
   }
 
-  const clearAll = () => {
-    setExpenses([])
+  const clearAll = async () => {
+    await api.deleteAllExpenses()
+    await refresh()
   }
 
-  return { expenses, addExpense, deleteExpense, clearAll }
+  return { expenses, summary, loading, error, addExpense, deleteExpense, clearAll, refresh }
 }

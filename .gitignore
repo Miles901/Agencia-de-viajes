@@ -1,0 +1,22 @@
+# .NET
+backend/**/bin/
+backend/**/obj/
+
+# Node
+node_modules/
+dist/
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vs/
+.idea/
+
+# OS
+.DS_Store
+
+# Expo
+mobile/.expo/
+mobile/dist/

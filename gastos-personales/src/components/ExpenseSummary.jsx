@@ -2,10 +2,27 @@ import { useMemo } from 'react'
 import { CATEGORIES } from '../constants/categories'
 import { formatCurrency } from '../utils/format'
 
-export default function ExpenseSummary({ expenses }) {
+export default function ExpenseSummary({ expenses, summary }) {
   const stats = useMemo(() => {
-    const total = expenses.reduce((sum, e) => sum + e.amount, 0)
+    if (summary) {
+      const byCategory = summary.byCategory.map((item) => {
+        const cat = CATEGORIES.find((c) => c.id === item.category) ?? CATEGORIES[CATEGORIES.length - 1]
+        return { ...cat, total: item.total }
+      })
+      const topCategory = byCategory.length
+        ? byCategory.reduce((a, b) => (a.total >= b.total ? a : b))
+        : null
 
+      return {
+        total: summary.total,
+        monthTotal: summary.monthTotal,
+        byCategory,
+        topCategory,
+        count: summary.count,
+      }
+    }
+
+    const total = expenses.reduce((sum, e) => sum + e.amount, 0)
     const now = new Date()
     const monthTotal = expenses
       .filter((e) => {
@@ -26,7 +43,7 @@ export default function ExpenseSummary({ expenses }) {
       : null
 
     return { total, monthTotal, byCategory, topCategory, count: expenses.length }
-  }, [expenses])
+  }, [expenses, summary])
 
   return (
     <section className="summary-grid">
@@ -40,7 +57,7 @@ export default function ExpenseSummary({ expenses }) {
         <span className="stat-label">Este mes</span>
         <strong className="stat-value">{formatCurrency(stats.monthTotal)}</strong>
         <span className="stat-meta">
-          {new Intl.DateTimeFormat('es-ES', { month: 'long', year: 'numeric' }).format(new Date())}
+          {new Intl.DateTimeFormat('es-DO', { month: 'long', year: 'numeric' }).format(new Date())}
         </span>
       </article>
 

@@ -1,37 +1,39 @@
-import ExpenseForm from './components/ExpenseForm'
-import ExpenseList from './components/ExpenseList'
-import ExpenseSummary from './components/ExpenseSummary'
-import { useExpenses } from './hooks/useExpenses'
-import './App.css'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { AuthProvider, useAuth } from './context/AuthContext'
+import DashboardPage from './pages/DashboardPage'
+import LoginPage from './pages/LoginPage'
+import RegisterPage from './pages/RegisterPage'
+import './pages/AuthPages.css'
+
+function ProtectedRoute({ children }) {
+  const { isAuthenticated, loading } = useAuth()
+  if (loading) return <div className="auth-loading">Cargando...</div>
+  return isAuthenticated ? children : <Navigate to="/login" replace />
+}
+
+function PublicRoute({ children }) {
+  const { isAuthenticated, loading } = useAuth()
+  if (loading) return <div className="auth-loading">Cargando...</div>
+  return isAuthenticated ? <Navigate to="/" replace /> : children
+}
+
+function AppRoutes() {
+  return (
+    <Routes>
+      <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
+      <Route path="/registro" element={<PublicRoute><RegisterPage /></PublicRoute>} />
+      <Route path="/" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  )
+}
 
 export default function App() {
-  const { expenses, addExpense, deleteExpense, clearAll } = useExpenses()
-
   return (
-    <div className="app">
-      <header className="app-header">
-        <div className="header-content">
-          <p className="eyebrow">Finanzas personales</p>
-          <h1>Mis Gastos</h1>
-          <p className="subtitle">
-            Registra, organiza y visualiza tus gastos del día a día.
-          </p>
-        </div>
-      </header>
-
-      <main className="app-main">
-        <ExpenseSummary expenses={expenses} />
-        <ExpenseForm onAdd={addExpense} />
-        <ExpenseList
-          expenses={expenses}
-          onDelete={deleteExpense}
-          onClearAll={clearAll}
-        />
-      </main>
-
-      <footer className="app-footer">
-        <p>Los datos se guardan automáticamente en tu navegador.</p>
-      </footer>
-    </div>
+    <AuthProvider>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </AuthProvider>
   )
 }

@@ -1,12 +1,13 @@
 export function formatCurrency(amount) {
-  return new Intl.NumberFormat('es-ES', {
+  return new Intl.NumberFormat('es-DO', {
     style: 'currency',
-    currency: 'EUR',
+    currency: 'DOP',
+    minimumFractionDigits: 2,
   }).format(amount)
 }
 
 export function formatDate(dateStr) {
-  return new Intl.DateTimeFormat('es-ES', {
+  return new Intl.DateTimeFormat('es-DO', {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
